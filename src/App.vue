@@ -1,12 +1,13 @@
 <template>
   <div id="app">
     <folder
-        :tree="{...mainTree.contents.slice(0, 5)}"
-        :name="mainTree.name"
-        :type="mainTree.type"
-        :directories="directories"
-        :files="files"
-        :links="links"
+        :tree="{...tree.contents}"
+        :name="tree.name"
+        :type="tree.type"
+        :my-path="getPath"
+        :directories="getDirectories"
+        :files="getFiles"
+        :links="getLinks"
     ></folder>
   </div>
 </template>
@@ -21,22 +22,25 @@ export default {
     Folder
   },
   mounted() {
-    const arr = [...this.mainTree.contents.slice(0, 5)]
-    arr.forEach(subTree => {
-      if (subTree.type === 'directory') {
-        this.directories.push(subTree)
-      } else if (subTree.type === 'file') {
-        this.files.push(subTree)
-      } else {
-        this.links.push(subTree)
-      }
-    })
+    this.arrTree = [...this.tree.contents]
+  },
+  computed: {
+    getPath() {
+      return ``
+    },
+    getDirectories() {
+      return this.arrTree.filter(el => el.type === 'directory')
+    },
+    getFiles() {
+      return this.arrTree.filter(el => el.type === 'file')
+    },
+    getLinks() {
+      return this.arrTree.filter(el => el.type === 'link')
+    },
   },
   data: () => ({
-    mainTree: tree,
-    directories: [],
-    files: [],
-    links: []
+    arrTree: [],
+    tree
 }),
 }
 </script>
@@ -49,5 +53,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  height: 90vh;
+  overflow: scroll;
+  display: flex;
 }
 </style>
